@@ -16,6 +16,12 @@ const TaskForm = () => {
 
     const [alert, setAlert] = useState(null);
 
+    // Helper function to get today's date in YYYY-MM-DD format
+    const getTodayDate = () => {
+        const today = new Date();
+        return today.toISOString().split('T')[0];
+    };
+
     useEffect(() => {
         if (currentTask !== null) {
             setTask({
@@ -38,8 +44,20 @@ const TaskForm = () => {
 
     const { title, description, priority, isCompleted, dueDate } = task;
 
-    const onChange = (e) =>
+    const onChange = (e) => {
+        // Additional validation for date to prevent past dates
+        if (e.target.name === 'dueDate') {
+            const selectedDate = e.target.value;
+            const today = getTodayDate();
+
+            if (selectedDate && selectedDate < today) {
+                setAlert({ type: 'danger', message: 'Due date cannot be in the past' });
+                return;
+            }
+        }
+
         setTask({ ...task, [e.target.name]: e.target.value });
+    };
 
     const onCheckboxChange = (e) =>
         setTask({ ...task, [e.target.name]: e.target.checked });
@@ -48,6 +66,12 @@ const TaskForm = () => {
         e.preventDefault();
         if (title === '') {
             setAlert({ type: 'danger', message: 'Please enter a title' });
+            return;
+        }
+
+        // Additional validation for due date on submit
+        if (dueDate && dueDate < getTodayDate()) {
+            setAlert({ type: 'danger', message: 'Due date cannot be in the past' });
             return;
         }
 
@@ -139,6 +163,7 @@ const TaskForm = () => {
                     id="dueDate"
                     value={dueDate}
                     onChange={onChange}
+                    min={getTodayDate()} // Prevents past dates from being selected
                 />
             </div>
 
