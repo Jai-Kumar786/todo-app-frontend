@@ -15,18 +15,27 @@ const authReducer = (state, action) => {
                 isAuthenticated: true,
                 loading: false,
                 user: action.payload,
+                error: null,
             };
         case REGISTER_SUCCESS:
         case LOGIN_SUCCESS:
             localStorage.setItem('token', action.payload.token);
             return {
                 ...state,
-                ...action.payload,
+                token: action.payload.token,
+                user: action.payload.user, // ✅ Store user data from login/register response
                 isAuthenticated: true,
                 loading: false,
+                error: null,
             };
         case REGISTER_FAIL:
         case LOGIN_FAIL:
+            return {
+                ...state,
+                error: action.payload,
+                loading: false,
+                // Don't clear token/user on login/register fail
+            };
         case AUTH_ERROR:
         case LOGOUT:
             localStorage.removeItem('token');
@@ -36,7 +45,7 @@ const authReducer = (state, action) => {
                 isAuthenticated: false,
                 loading: false,
                 user: null,
-                error: action.payload,
+                error: action.type === 'AUTH_ERROR' ? action.payload : null,
             };
         case CLEAR_ERRORS:
             return {
