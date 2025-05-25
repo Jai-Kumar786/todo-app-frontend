@@ -1,0 +1,22 @@
+# Netlify Configuration File
+# This file tells Netlify how to build and deploy your React application
+
+[build]
+# Directory to change to before starting a build
+base = "/"
+
+# Directory that contains the deploy-ready HTML files and assets
+publish = "build"
+
+# Default build command
+command = "npm run build"
+
+# Handle React Router
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+
+# Environment variables
+[build.environment]
+REACT_APP_STAGE = "production"
