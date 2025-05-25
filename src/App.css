@@ -476,7 +476,7 @@ ul {
 .landing {
     height: calc(100vh - 150px);
     position: relative;
-    background: url('../public/landing-bg.jpg') no-repeat center center/cover;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .landing::before {
@@ -486,7 +486,7 @@ ul {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.3);
 }
 
 .landing-inner {
